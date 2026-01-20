@@ -1,0 +1,532 @@
+
+🎬 App de Videoclub: Funcionalidades principales
+👤 Usuario:
+
+Login / Registro
+
+Sesión de cliente
+
+🎞 Películas:
+
+Lista de películas (con fotos)
+
+Detalles de película
+
+Botón para alquilar
+
+Opción para devolver una película alquilada
+
+🧱 Estructura del proyecto Compose recomendada:
+com.tuapp.videoclub
+│
+├── MainActivity.kt
+├── navigation/
+│   └── AppNavigation.kt
+│
+├── screens/
+│   ├── LoginScreen.kt
+│   ├── RegisterScreen.kt
+│   ├── MovieListScreen.kt
+│   ├── MovieDetailScreen.kt
+│   └── MyRentalsScreen.kt
+│
+├── model/
+│   ├── Usuario.kt
+│   └── Pelicula.kt
+│
+├── repository/
+│   └── FakeMovieRepository.kt
+│
+└── ui/
+    └── components/
+        └── MovieCard.kt
+
+🔗 Flujo de navegación
+
+Inicio: Login o registro
+
+Si se autentica → Pantalla de lista de películas
+
+Puede ver detalles, alquilar, o devolver una película
+
+Acceder a “Mis Alquileres” (MyRentalsScreen)
+
+🖼 Películas con imagen
+
+Puedes usar imágenes con Coil en Compose:
+
+AsyncImage(
+    model = pelicula.imagenUrl,
+    contentDescription = "Portada",
+    modifier = Modifier.size(150.dp),
+    contentScale = ContentScale.Crop
+)
+
+⚙️ ¿Qué viene ahora?
+
+Voy a prepararte el proyecto completo, pantalla por pantalla, y luego te explico cómo copiarlo en Android Studio.
+
+Como no puedo enviarte directamente un .zip, te armaré el contenido aquí mismo para que:
+
+Copies los archivos en tu proyecto
+
+O los descargues desde GitHub (si quieres que lo suba allí)
+
+📦 ¿Quieres que comencemos con la creación del proyecto Compose ahora, con las pantallas base?
+
+✅ Solo dime y empiezo con:
+
+MainActivity.kt
+
+AppNavigation.kt
+
+Pantalla de login (LoginScreen.kt)
+
+Pantalla de películas (MovieListScreen.kt)
+
+¿Listo para que empiece a generar el código?
+
+Tú dijiste:
+SI GENERAME EL CODIGO PARA REALIZAR ESTE PROYECTO
+ChatGPT Plus
+
+¡Excelente! Te voy a generar el proyecto completo en Jetpack Compose para una app de videoclub, que incluye:
+
+✅ FUNCIONALIDADES
+
+Login / Registro (local y simple)
+
+Listado de películas con imagen
+
+Detalles de película
+
+Botón para alquilar y devolver película
+
+Lista de películas alquiladas
+
+🧱 ESTRUCTURA GENERAL
+
+MainActivity.kt
+
+AppNavigation.kt (navegación entre pantallas)
+
+screens/: LoginScreen, RegisterScreen, MovieListScreen, MovieDetailScreen, MyRentalsScreen
+
+model/: Usuario.kt, Pelicula.kt
+
+repository/: FakeMovieRepository.kt (datos falsos para pruebas)
+
+components/: MovieCard.kt
+
+Coil para mostrar imágenes de películas
+
+🔧 PASOS INICIALES EN TU PROYECTO ANDROID STUDIO
+
+Crear un proyecto nuevo en Android Studio con Empty Compose Activity
+
+Asegúrate de tener estas dependencias en tu build.gradle (Module):
+
+// Jetpack Compose
+implementation "androidx.compose.ui:ui:1.5.0"
+implementation "androidx.navigation:navigation-compose:2.7.0"
+implementation "androidx.activity:activity-compose:1.8.0"
+
+// Coil para cargar imágenes
+implementation("io.coil-kt:coil-compose:2.4.0")
+
+🧩 1. MainActivity.kt
+package com.tuapp.videoclub
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import com.tuapp.videoclub.navigation.AppNavigation
+import com.tuapp.videoclub.ui.theme.VideoclubTheme
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            VideoclubTheme {
+                AppNavigation()
+            }
+        }
+    }
+}
+
+🧭 2. navigation/AppNavigation.kt
+package com.tuapp.videoclub.navigation
+
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.composable
+import com.tuapp.videoclub.screens.*
+
+@Composable
+fun AppNavigation() {
+    val navController: NavHostController = rememberNavController()
+    NavHost(navController = navController, startDestination = "login") {
+        composable("login") { LoginScreen(navController) }
+        composable("register") { RegisterScreen(navController) }
+        composable("movies") { MovieListScreen(navController) }
+        composable("movieDetail/{movieId}") { backStackEntry ->
+            MovieDetailScreen(
+                navController,
+                movieId = backStackEntry.arguments?.getString("movieId") ?: ""
+            )
+        }
+        composable("rentals") { MyRentalsScreen(navController) }
+    }
+}
+
+👤 3. model/Usuario.kt
+package com.tuapp.videoclub.model
+
+data class Usuario(
+    val email: String,
+    val password: String
+)
+
+🎞 4. model/Pelicula.kt
+package com.tuapp.videoclub.model
+
+data class Pelicula(
+    val id: String,
+    val titulo: String,
+    val descripcion: String,
+    val imagenUrl: String,
+    var alquilada: Boolean = false
+)
+
+🎬 5. repository/FakeMovieRepository.kt
+package com.tuapp.videoclub.repository
+
+import com.tuapp.videoclub.model.Pelicula
+import java.util.*
+
+object FakeMovieRepository {
+    private val peliculas = mutableListOf(
+        Pelicula(
+            id = UUID.randomUUID().toString(),
+            titulo = "Matrix",
+            descripcion = "Un clásico de ciencia ficción.",
+            imagenUrl = "https://i.imgur.com/YOz8EpO.jpg"
+        ),
+        Pelicula(
+            id = UUID.randomUUID().toString(),
+            titulo = "Inception",
+            descripcion = "Sueños dentro de sueños.",
+            imagenUrl = "https://i.imgur.com/NX3zP9c.jpg"
+        ),
+        Pelicula(
+            id = UUID.randomUUID().toString(),
+            titulo = "John Wick",
+            descripcion = "Acción sin parar.",
+            imagenUrl = "https://i.imgur.com/6Ej2t8Q.jpg"
+        )
+    )
+
+    fun getPeliculas() = peliculas
+
+    fun getPeliculaPorId(id: String): Pelicula? = peliculas.find { it.id == id }
+
+    fun alquilarPelicula(id: String) {
+        getPeliculaPorId(id)?.alquilada = true
+    }
+
+    fun devolverPelicula(id: String) {
+        getPeliculaPorId(id)?.alquilada = false
+    }
+
+    fun getPeliculasAlquiladas(): List<Pelicula> = peliculas.filter { it.alquilada }
+}
+
+🧱 6. Pantallas (screens/) y componentes
+🎯 LoginScreen.kt (simplificada)
+@Composable
+fun LoginScreen(navController: NavHostController) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text("Iniciar Sesión", style = MaterialTheme.typography.h5)
+        OutlinedTextField(value = email, onValueChange = { email = it }, label = { Text("Email") })
+        OutlinedTextField(value = password, onValueChange = { password = it }, label = { Text("Contraseña") })
+
+        Button(onClick = { navController.navigate("movies") }, modifier = Modifier.padding(top = 16.dp)) {
+            Text("Entrar")
+        }
+
+        TextButton(onClick = { navController.navigate("register") }) {
+            Text("No tienes cuenta? Regístrate")
+        }
+    }
+}
+
+➕ RegisterScreen.kt
+@Composable
+fun RegisterScreen(navController: NavHostController) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text("Crear Cuenta", style = MaterialTheme.typography.h5)
+        OutlinedTextField(value = email, onValueChange = { email = it }, label = { Text("Email") })
+        OutlinedTextField(value = password, onValueChange = { password = it }, label = { Text("Contraseña") })
+
+        Button(onClick = { navController.navigate("movies") }, modifier = Modifier.padding(top = 16.dp)) {
+            Text("Registrarse")
+        }
+    }
+}
+
+📋 MovieListScreen.kt
+@Composable
+fun MovieListScreen(navController: NavHostController) {
+    val peliculas = FakeMovieRepository.getPeliculas()
+
+    Column {
+        Text("Películas disponibles", style = MaterialTheme.typography.h5, modifier = Modifier.padding(16.dp))
+        LazyColumn {
+            items(peliculas) { pelicula ->
+                MovieCard(pelicula = pelicula) {
+                    navController.navigate("movieDetail/${pelicula.id}")
+                }
+            }
+        }
+
+        Button(onClick = { navController.navigate("rentals") }, modifier = Modifier.padding(16.dp)) {
+            Text("Mis alquileres")
+        }
+    }
+}
+
+🖼 MovieDetailScreen.kt
+@Composable
+fun MovieDetailScreen(navController: NavHostController, movieId: String) {
+    val pelicula = FakeMovieRepository.getPeliculaPorId(movieId)
+
+    pelicula?.let {
+        Column(modifier = Modifier.padding(16.dp)) {
+            AsyncImage(
+                model = it.imagenUrl,
+                contentDescription = it.titulo,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+                contentScale = ContentScale.Crop
+            )
+
+            Text(it.titulo, style = MaterialTheme.typography.h5)
+            Text(it.descripcion)
+
+            Button(onClick = {
+                if (it.alquilada) {
+                    FakeMovieRepository.devolverPelicula(it.id)
+                } else {
+                    FakeMovieRepository.alquilarPelicula(it.id)
+                }
+                navController.popBackStack()
+            }, modifier = Modifier.padding(top = 16.dp)) {
+                Text(if (it.alquilada) "Devolver" else "Alquilar")
+            }
+        }
+    }
+}
+
+📦 MyRentalsScreen.kt
+@Composable
+fun MyRentalsScreen(navController: NavHostController) {
+    val alquiladas = FakeMovieRepository.getPeliculasAlquiladas()
+
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        Text("Mis Alquileres", style = MaterialTheme.typography.h5)
+
+        LazyColumn {
+            items(alquiladas) { pelicula ->
+                MovieCard(pelicula = pelicula) {
+                    navController.navigate("movieDetail/${pelicula.id}")
+                }
+            }
+        }
+
+        Button(onClick = { navController.popBackStack() }, modifier = Modifier.padding(top = 16.dp)) {
+            Text("Volver")
+        }
+    }
+}
+
+🎥 components/MovieCard.kt
+
+Adjuntar
+Buscar
+
+la app del videoclub en Jetpack Compose agregando categorías de películas como:
+
+🎭 Drama
+
+⚔️ Bélica
+
+😂 Comedia
+
+🎬 Acción
+
+👻 Terror
+
+Esto te permitirá mostrar las películas divididas por género en la lista principal, de forma visualmente organizada.
+
+🧠 ¿Cómo lo haremos?
+
+Añadir el campo categoria al modelo Pelicula.kt.
+
+Agrupar las películas por categoría.
+
+Mostrar cada categoría como un título (Text) con su lista debajo.
+
+✅ 1. Modifica el modelo Pelicula.kt
+package com.tuapp.videoclub.model
+
+data class Pelicula(
+    val id: String,
+    val titulo: String,
+    val descripcion: String,
+    val imagenUrl: Int,
+    val categoria: String,  // 🎯 nuevo campo
+    var alquilada: Boolean = false
+)
+
+✅ 2. Actualiza las películas en FakeMovieRepository.kt
+private val peliculas = mutableListOf(
+    Pelicula(
+        id = UUID.randomUUID().toString(),
+        titulo = "Matrix",
+        descripcion = "Un clásico de ciencia ficción.",
+        imagenUrl = "https://i.imgur.com/YOz8EpO.jpg",
+        categoria = "Ciencia Ficción"
+    ),
+    Pelicula(
+        id = UUID.randomUUID().toString(),
+        titulo = "1917",
+        descripcion = "Una historia en la Primera Guerra Mundial.",
+        imagenUrl = "https://i.imgur.com/ZcPpK5c.jpg",
+        categoria = "Bélica"
+    ),
+    Pelicula(
+        id = UUID.randomUUID().toString(),
+        titulo = "El Padrino",
+        descripcion = "Clásico drama de la mafia.",
+        imagenUrl = "https://i.imgur.com/xXf3K8W.jpg",
+        categoria = "Drama"
+    ),
+    Pelicula(
+        id = UUID.randomUUID().toString(),
+        titulo = "Deadpool",
+        descripcion = "Héroe irreverente con mucho humor.",
+        imagenUrl = "https://i.imgur.com/R7E7Dwa.jpg",
+        categoria = "Comedia"
+    )
+)
+
+✅ 3. Agrupar por categoría en MovieListScreen.kt
+@Composable
+fun MovieListScreen(navController: NavHostController) {
+    val peliculas = FakeMovieRepository.getPeliculas()
+
+    // Agrupamos por categoría
+    val peliculasPorCategoria = peliculas.groupBy { it.categoria }
+
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text("Películas por Categoría", style = MaterialTheme.typography.h5)
+
+        LazyColumn {
+            peliculasPorCategoria.forEach { (categoria, lista) ->
+                item {
+                    Text(
+                        text = categoria,
+                        style = MaterialTheme.typography.h6,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+                }
+
+                items(lista) { pelicula ->
+                    MovieCard(pelicula = pelicula) {
+                        navController.navigate("movieDetail/${pelicula.id}")
+                    }
+                }
+            }
+        }
+
+        Button(
+            onClick = { navController.navigate("rentals") },
+            modifier = Modifier
+                .padding(top = 16.dp)
+                .fillMaxWidth()
+        ) {
+            Text("Mis Alquileres")
+        }
+    }
+}
+
+✅ 4. Asegúrate de tener MovieCard.kt así:
+package com.tuapp.videoclub.ui.components
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import com.tuapp.videoclub.model.Pelicula
+
+@Composable
+fun MovieCard(pelicula: Pelicula, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+            .clickable { onClick() }
+    ) {
+        Row(modifier = Modifier.padding(8.dp)) {
+            AsyncImage(
+                model = pelicula.imagenUrl,
+                contentDescription = pelicula.titulo,
+                modifier = Modifier
+                    .size(100.dp)
+                    .padding(end = 8.dp),
+                contentScale = ContentScale.Crop
+            )
+            Column {
+                Text(pelicula.titulo, style = MaterialTheme.typography.titleMedium)
+                Text(pelicula.descripcion, style = MaterialTheme.typography.bodySmall)
+                Text("Categoría: ${pelicula.categoria}", style = MaterialTheme.typography.bodySmall)
+                if (pelicula.alquilada) {
+                    Text("Alquilada ✅", color = MaterialTheme.colorScheme.primary)
+                }
+            }
+        }
+    }
+}
+
+✅ ¿Resultado esperado?
+
+Películas agrupadas por categoría
+
+Cada grupo tiene un título visible (“Drama”, “Comedia”, etc.)
+
+Cada tarjeta muestra imagen, título, descripción, y estado de alquiler
+
+¿Quieres que además tenga un filtro por categoría (como un dropdown o chips) para mostrar solo una categoría a la vez?
+Puedo agregarlo si lo necesitas.
+
+¿Te gustaría que prepare todo este proyecto completo en un repositorio GitHub o prefieres seguir pegando archivos uno por uno?
+
+Adjuntar
+Buscar
+Estudiemos
+Voz
+ChatGPT puede cometer errores. Considera verificar la información importante. Ver preferencias de cookies.

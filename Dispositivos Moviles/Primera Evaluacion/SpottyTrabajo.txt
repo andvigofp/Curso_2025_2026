@@ -1,0 +1,256 @@
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.LibraryBooks
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+
+data class PlaylistItem(
+    val title: String,
+    val imageUrl: String
+)
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SpotifyHomeScreen() {
+    val scrollState = rememberScrollState()
+
+    val goodMorningPlaylists = listOf(
+        PlaylistItem(titulo = "Today's Top Hits", imageUrl = "android.resource://com.example.spottyeduardoandres/drawable/ic_todasystop"),
+        PlaylistItem(titulo = "Alan Gogoll", imageUrl =  "android.resource://com.example.spottyeduardoandres/drawable/ic_alangogoll"),
+        PlaylistItem(titulo = "Dope Labs", imageUrl = "android.resource://com.example.spottyeduardoandres/drawable/ic_drolabs"),
+        PlaylistItem(titulo = "Chill Hits", imageUrl = "android.resource://com.example.spottyeduardoandres/drawable/ic_chillhits"),
+        PlaylistItem(titulo = "Latina to Latina", imageUrl = "android.resource://com.example.spottyeduardoandres/drawable/ic_latinatolatina"),
+        PlaylistItem(titulo = "Amanda Seales", imageUrl = "android.resource://com.example.spottyeduardoandres/drawable/ic_amandaseales")
+    )
+
+    val madeForYou = listOf(
+        PlaylistItem(titulo = "On Repeat", imageUrl = "android.resource://com.example.spottyeduardoandres/drawable/ic_onrepeat"),
+        PlaylistItem(titulo = "Your Discover Weekly", imageUrl = "android.resource://com.example.spottyeduardoandres/drawable/ic_yourdiscoverweekly"),
+        PlaylistItem(titulo = "Mix Daily", imageUrl = "android.resource://com.example.spottyeduardoandres/drawable/ic_mixdaily")
+    )
+
+    val popularPlaylists = listOf(
+        PlaylistItem(titulo = "Feelin' Good", imageUrl = "android.resource://com.example.spottyeduardoandres/drawable/ic_feelingood"),
+        PlaylistItem(titulo = "Pumped Pop", imageUrl = "android.resource://com.example.spottyeduardoandres/drawable/ic_pumpedpop"),
+        PlaylistItem(titulo = "Chill Vibes", imageUrl = "android.resource://com.example.spottyeduardoandres/drawable/ic_chillvibes")
+    )
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState) // <-- Esto hace que toda la columna sea scrollable
+                .background(Color.Black)
+                .padding(16.dp)
+        ) {
+            TopBar()
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            GoodMorningSection(playlists = goodMorningPlaylists)
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = "Made for you",
+                color = Color.White,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            MadeForYouSection(playlists = madeForYou)
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = "Popular playlists",
+                color = Color.White,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            PopularPlaylistsSection(playlists = popularPlaylists)
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            BottomNavigationBar()
+        }
+    }
+
+
+@Preview
+@Composable
+fun SpotifyHomePreview() {
+    SpotifyHomeScreen()
+}
+
+@Composable
+fun TopBar() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "Good morning",
+            color = Color.White,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Icon(
+            imageVector = Icons.Default.Settings,
+            contentDescription = "Settings",
+            tint = Color.White
+        )
+    }
+}
+
+@Composable
+fun GoodMorningSection(playlists: List<PlaylistItem>) {
+    Column {
+        for (i in playlists.indices step 2) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                GoodMorningCard(playlists[i], modifier = Modifier.weight(1f))
+                if (i + 1 < playlists.size) {
+                    GoodMorningCard(playlists[i + 1], modifier = Modifier.weight(1f))
+                } else {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+    }
+}
+
+implementation("io.coil-kt:coil-compose:2.4.0") // Para AsyncImage
+
+@Composable
+fun GoodMorningCard(playlist: PlaylistItem, modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier
+            .height(60.dp)
+            .background(Color.DarkGray, shape = RoundedCornerShape(6.dp))
+            .clickable { }
+            .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        AsyncImage(
+            model = playlist.imagenUrl,
+            contentDescription = playlist.titulo,
+            modifier = Modifier
+                .size(44.dp)
+                .background(Color.Gray, shape = RoundedCornerShape(4.dp)),
+            contentScale = ContentScale.Crop
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = playlist.titulo,
+            color = Color.White,
+            fontSize = 14.sp,
+            maxLines = 1
+        )
+    }
+}
+
+@Composable
+fun MadeForYouSection(playlists: List<PlaylistItem>) {
+    LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        items(playlists.size) { index ->
+            Column(
+                modifier = Modifier
+                    .width(140.dp)
+                    .clickable { }
+            ) {
+                AsyncImage(
+                    model = playlists[index].imageUrl,
+                    contentDescription = playlists[index].titulo,
+                    modifier = Modifier
+                        .size(140.dp)
+                        .background(Color.Gray, RoundedCornerShape(8.dp)),
+                    contentScale = ContentScale.Crop
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = playlists[index].title,
+                    color = Color.White,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun PopularPlaylistsSection(playlists: List<PlaylistItem>) {
+    LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        items(playlists.size) { index ->
+            Column(
+                modifier = Modifier
+                    .width(120.dp)
+                    .clickable { }
+            ) {
+                AsyncImage(
+                    model = playlists[index].imageUrl,
+                    contentDescription = playlists[index].titulo,
+                    modifier = Modifier
+                        .size(120.dp)
+                        .background(Color.Gray, RoundedCornerShape(8.dp)),
+                    contentScale = ContentScale.Crop
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = playlists[index].title,
+                    color = Color.White,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+        }
+    }
+}
+
+implementation("androidx.compose.material:material-icons-extended") //Icono LibaryBooks
+
+
+@Composable
+fun BottomNavigationBar() {
+    NavigationBar (containerColor = Color.Black){
+        NavigationBarItem(
+            selected = true,
+            onClick = { },
+            icon = { Icon(Icons.Default.Home, contentDescription = "Home", tint = Color.White) },
+            label = { Text("Home", color = Color.White) }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = { },
+            icon = { Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.White)},
+            label = { Text("Search", color = Color.White)}
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = { },
+            icon = { Icon(Icons.Default.LibraryBooks, contentDescription = "Library", tint = Color.White)},
+            label = { Text("Your Library", color = Color.White)}
+        )
+    }
+}

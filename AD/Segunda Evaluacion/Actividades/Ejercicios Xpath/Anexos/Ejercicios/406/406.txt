@@ -1,0 +1,55 @@
+1- Nombre de la universidad.
+/universidad/nombre/text()
+
+2- Pais de la universidad.
+/universidad/pais/text()
+
+3- Nombres de las carreras.
+/universidad/carreras/carrera/nombre/text()
+
+4- Años de plan de estudio de las carreras.
+distinct-values(/universidad/carreras/carrera/plan/text())
+
+5- Nombres de todos los alumnos.
+/universidad/alumnos/alumno/nombre/text()
+
+6- Identificadores de todas las carreras.
+/universidad/carreras/carrera/@id/string()
+
+7- Datos de la carrera cuyo id es c01.
+/universidad/carreras/carrera[@id="c01"]
+
+8- Centro en que se estudia de la carrera cuyo id es c02.
+/universidad/carreras/carrera[@id="c02"]/centro/text()
+
+9- Nombre de las carreras que tengan subdirector.
+/universidad/carreras/carrera/subdirector/text()
+/universidad/carreras/carrera[exists(subdirector)]/nombre/text()
+
+10- Nombre de los alumnos que estén haciendo proyecto.
+/universidad/alumnos/alumno/estudios/proyecto/text()
+/universidad/alumnos/alumno[exists(estudios/proyecto)]/nombre/text()
+
+11- Códigos de las carreras en las que hay algún alumno matriculado.
+distinct-values(/universidad/alumnos/alumno/estudios/carrera/@codigo)
+
+12- Apellidos y nombre de los alumnos con beca.
+/universidad/alumnos/alumno[@beca="si"]/apellido1/text() | /universidad/alumnos/alumno[@beca="si"]/apellido2/text() | /universidad/alumnos/alumno[@beca="si"]/nombre/text()
+
+13- Nombre de las asignaturas de la titulación c04.
+
+
+14- Nombre de las asignaturas de segundo trimestre.
+15- Nombre de las asignaturas que no tienen 4 créditos teóricos.
+16- Código de la carrera que estudia el último alumno.
+17- Código de las asignaturas que estudian mujeres.
+18- Nombre de los alumnos que están matriculados en la asignatura a02.
+19- Códigos de las carreras que estudian los alumnos matriculados en alguna asignatura.
+20- Apellidos de todos los hombres.
+21- Nombre de la carrera que estudia Víctor Manuel.
+22- Nombre de las asignaturas que estudia Luisa.
+23- Primer apellido de los alumnos matriculados en Ingeniería del Software.
+24- Nombre de las carreras que estudian los alumnos matriculados en la asignatura Tecnología de los Alimentos.
+25- Nombre de los alumnos matriculados en carreras que no tienen subdirector.
+26- Nombre de las alumnos matriculados en asignaturas con 0 créditos prácticos y que estudien la carrera de I.T. Informática.
+27- Nombre de los alumnos que estudian carreras cuyos planes son anteriores a 2002.

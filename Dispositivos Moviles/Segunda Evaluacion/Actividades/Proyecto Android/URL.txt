@@ -1,0 +1,3 @@
+https://developer.android.com/guide/components/intents-common?hl=es-419 - Programar Alarma
+http://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/MIME_types/Common_types
+https://developer.android.com/guide/components/activities/activity-lifecycle?hl=es-419 - Vida aplicaccion
