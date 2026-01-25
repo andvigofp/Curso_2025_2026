@@ -37,19 +37,46 @@ distinct-values(/universidad/alumnos/alumno/estudios/carrera/@codigo)
 /universidad/alumnos/alumno[@beca="si"]/apellido1/text() | /universidad/alumnos/alumno[@beca="si"]/apellido2/text() | /universidad/alumnos/alumno[@beca="si"]/nombre/text()
 
 13- Nombre de las asignaturas de la titulación c04.
-
+/universidad/asignaturas/asignatura[@titulacion="c04"]/nombre/text()
 
 14- Nombre de las asignaturas de segundo trimestre.
+/universidad/asignaturas/asignatura[trimestre="2"]/nombre/text()
+
 15- Nombre de las asignaturas que no tienen 4 créditos teóricos.
+/universidad/asignaturas/asignatura[creditos_teoricos !="4"]/nombre/text()
+
 16- Código de la carrera que estudia el último alumno.
+/universidad/alumnos/alumno[last()]/estudios/carrera/@codigo
+
 17- Código de las asignaturas que estudian mujeres.
+distinct-values(/universidad/alumnos/alumno[sexo="Mujer"]/estudios/asignaturas/asignatura/@codigo)
+
 18- Nombre de los alumnos que están matriculados en la asignatura a02.
+/universidad/alumnos/alumno[estudios/asignaturas/asignatura/@codigo="a02"]/nombre/text()
+
 19- Códigos de las carreras que estudian los alumnos matriculados en alguna asignatura.
+/universidad/carreras/carrera[@id=/universidad/alumnos/alumno/estudios[exists(asignaturas/asignatura)]/carrera/@codigo]/@id
+
 20- Apellidos de todos los hombres.
+/universidad/alumnos/alumno[sexo="Hombre"]/apellido1/text() | /universidad/alumnos/alumno[sexo="Hombre"]/apellido2/text()
+
 21- Nombre de la carrera que estudia Víctor Manuel.
+/universidad/carreras/carrera[@id=/universidad/alumnos/alumno[nombre/text()="Víctor Manuel"]/estudios/carrera/@codigo]/nombre/text()
+
 22- Nombre de las asignaturas que estudia Luisa.
+/universidad/asignaturas/asignatura[@id=/universidad/alumnos/alumno[nombre/text()="Luisa"]/estudios/asignaturas/asignatura/@codigo]/nombre/text()
+
 23- Primer apellido de los alumnos matriculados en Ingeniería del Software.
+distinct-values(/universidad/alumnos/alumno[estudios/asignaturas/asignatura/@codigo=/universidad/asignaturas/asignatura[nombre/text()="Ingeniería del Software"]/@id]/apellido1/text())
+
 24- Nombre de las carreras que estudian los alumnos matriculados en la asignatura Tecnología de los Alimentos.
+/universidad/carreras/carrera[@id=/universidad/alumnos/alumno/estudios[asignaturas/asignatura/@codigo=/universidad/asignaturas/asignatura[nombre/text()="Tecnología de los Alimentos"]/@id]/carrera/@codigo]/nombre/text()
+
 25- Nombre de los alumnos matriculados en carreras que no tienen subdirector.
+/universidad/alumnos/alumno[estudios[carrera/@codigo=/universidad/carreras/carrera[nombre/text()="I.T. Informática"]/@id]/asignaturas/asignatura/@codigo=/universidad/asignaturas/asignatura[creditos_practicos="0"]/@id]/nombre/text()
+
 26- Nombre de las alumnos matriculados en asignaturas con 0 créditos prácticos y que estudien la carrera de I.T. Informática.
+/universidad/alumnos/alumno[estudios[carrera/@codigo=/universidad/carreras/carrera[nombre/text()="I.T. Informática"]/@id]/asignaturas/asignatura/@codigo=/universidad/asignaturas/asignatura[creditos_practicos="0"]/@id]/nombre/text()
+
 27- Nombre de los alumnos que estudian carreras cuyos planes son anteriores a 2002.
+/universidad/alumnos/alumno[estudios/carrera/@codigo=/universidad/carreras/carrera[plan<2002]/@id]/nombre/text()

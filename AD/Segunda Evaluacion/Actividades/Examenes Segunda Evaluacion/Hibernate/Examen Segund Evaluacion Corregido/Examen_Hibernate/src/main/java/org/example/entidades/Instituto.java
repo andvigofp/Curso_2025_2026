@@ -31,7 +31,7 @@ public class Instituto {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "ies_ciclos",
-            joinColumns = @JoinColumn(name = " cod_instituto", nullable = false),
+            joinColumns = @JoinColumn(name = "cod_instituto", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "cod_ciclo")
     )
     private List<Ciclo> listaCiclo = new ArrayList<>();

@@ -10,7 +10,7 @@ Construye las sentencias XPath que permitan obtener los siguientes datos:
 /agenda/propietario/identificadores/nombre | /agenda/propietario/identificadores/apellidos
 
 4- Nombre e identificador de cada contacto.
-/agenda/contactos/identificadores/nombre | /agenda/contactos/persona/@id
+/agenda/contactos/persona/identificadores/nombre | agenda/contactos/persona/@id
 
 5- Datos del contacto con identificador p02.
 /agenda/contactos/persona[@id="p02"]

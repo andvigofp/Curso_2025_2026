@@ -49,13 +49,13 @@ public class MEJExmamen {
                     institutoRepositorio.crearInstituto("Pepe", "986375088");
                     break;
                 case 2:
-                    institutoRepositorio.eliminarInstituto(3);
+                    institutoRepositorio.eliminarInstituto(1);
                     break;
                 case 3:
                     cicloRepositorio.crearCiclo("Clico5");
                     break;
                 case 4:
-                    cicloRepositorio.borrarCiclo(3);
+                    cicloRepositorio.borrarCiclo(4);
                     break;
                 case 5:
                     institutoRepositorio.modificarInstituto(2, "6666666");

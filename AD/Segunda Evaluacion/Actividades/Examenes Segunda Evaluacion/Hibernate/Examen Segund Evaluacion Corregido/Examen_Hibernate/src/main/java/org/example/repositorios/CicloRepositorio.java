@@ -61,6 +61,11 @@ public class CicloRepositorio {
                 return;
             }
 
+            for (Instituto instituto : ciclo.getListaInstituto()) {
+                instituto.getListaCiclo().remove(ciclo);
+            }
+            ciclo.getListaInstituto().clear();
+
             session.remove(ciclo);
 
             trx.commit();
