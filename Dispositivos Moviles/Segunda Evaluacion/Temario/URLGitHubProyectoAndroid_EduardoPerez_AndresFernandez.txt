@@ -1,0 +1,21 @@
+Nombres del Grupo
+Eduardo Pérez García
+Andrés Fernández Pereira
+
+
+Proyecto
+-----------------------------------------------------------
+https://github.com/andvigofp/ProyectoAndroid_Eduardo_Andres
+
+La pantalla de Loging para tener dos modos 
+- modo online, estará activo mientras esta la api levantada
+- modo invitado (offline) se cambiara en unos segundos, funcionara con la base datos ROOM
+
+ApiExtena
+--------------------------------------------------
+https://github.com/andvigofp/ApiAndresEduardo.git
+
+Usuario utiliza
+----------------------- 
+email: luisa@gmail.com
+password: abc123.
